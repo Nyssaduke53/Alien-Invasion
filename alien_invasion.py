@@ -15,16 +15,16 @@ class AlienInvasion:
         self.settings = Settings()
 
         
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height
-        pygame.display.set_caption("Alien Invasion")
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        
+        pygame.display.set_caption(self.settings.name)
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
 
-        # Set the background color.
-        self.bg_color = (self.settings.bg_color)
+        # Set the background.
+        self.bg = pygame.image.load(self.settings.bg_file)
+        self.bg = pygame.transform.scale(self.bg, (self.settings.screen_width, self.settings.screen_height))
         
 
     def run_game(self):
@@ -34,7 +34,7 @@ class AlienInvasion:
              self.ship.update()
              self._update_bullets()
              self._update_screen()
-             self.clock.tick(60)
+             self.clock.tick(self.settings.FPS)
 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -72,10 +72,10 @@ class AlienInvasion:
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
-        self.screen.fill(self.settings.bg_color)
+        
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-        self.ship.blitme()
+        self.screen.blit(self.bg, (0, 0))
 
         pygame.display.flip()
     

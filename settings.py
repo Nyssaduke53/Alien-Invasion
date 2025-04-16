@@ -6,7 +6,9 @@ class Settings:
         """Initialize the game's settings."""
         self.screen_width = 1200
         self.screen_height = 800
-        self.bg_file = Path.cwd() / 'Assets' / 'images' / ''
+        self.bg_file = Path.cwd() / 'Assets' / 'images' / 'starbasesnow.png'
+        self.name = "Alien Invasion"
+        self.FPS = 60
 
         # Ship settings
         self.ship_speed = 4.5
