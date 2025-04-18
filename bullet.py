@@ -2,7 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 
 class Bullet(Sprite):
-    """A class to manage bullets fired from the ship."""
+    """A class to manage individual bullets."""
 
     def __init__(self, game: 'AlienInvasion'):
         """
@@ -22,7 +22,7 @@ class Bullet(Sprite):
         self.rect = self.image.get_rect()
         self.rect.midtop = game.ship.rect.midtop
 
-        # Store the bullet's exact vertical position as a float.
+        # Store the bullet's exact vertical position as a float for smoothness
         self.y = float(self.rect.y)
     
     def update(self):

@@ -2,19 +2,20 @@ import pygame
 from bullet_manager import BulletManager
 
 class Ship:
-    """A class to manage the ship in the game."""
+    """A class to manage a ship in the game."""
 
     def __init__(self, game, bullet_manager: 'bullet_manager'):
         """
         Initialize the ship and set its starting position.
         
         :param game: The main game instance.
-        :param arsenal: The ship's arsenal, managing its bullets.
+        :param bullet_manager: The ship's bullet manager.
         """
         self.game = game
         self.screen = game.screen
         self.settings = game.settings
         self.screen_rect = self.screen.get_rect()
+        self.bullet_manager = bullet_manager
 
         # Load and scale the ship image once during initialization.
         self.image = pygame.image.load(self.settings.ship_file)
@@ -23,16 +24,12 @@ class Ship:
 
         # Position the ship at the bottom center of the screen.
         self.rect.midbottom = self.screen_rect.midbottom
-
-        # Store the ship's exact horizontal position as a float for smoother movement.
         self.x = float(self.rect.x)
 
         # Movement flags: The ship starts stationary.
         self.moving_right = False
         self.moving_left = False
-
-        # The ship's arsenal, responsible for managing and firing bullets.
-        self.bullet_manager = bullet_manager
+        
 
     def update(self):
         """
