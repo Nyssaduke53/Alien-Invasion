@@ -3,42 +3,42 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
-from arsenal import Arsenal
+from bullet_manager import BulletManager
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
 
     def __init__(self):
-        """Initialize the game, and create game resources."""
+        """Initialize the game, create game resources, and set up the game environment."""
         pygame.init()
         self.clock = pygame.time.Clock()
         self.settings = Settings()
 
-        
+        # Set up the display screen.
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
-        
         pygame.display.set_caption(self.settings.name)
 
-        self.ship = Ship(self, Arsenal(self))
+        # Create ship and its BulletManager.
+        self.ship = Ship(self, BulletManager(self))
         self.bullets = pygame.sprite.Group()
 
-        # Set the background.
+        # Load and scale background image.
         self.bg = pygame.image.load(self.settings.bg_file)
         self.bg = pygame.transform.scale(self.bg, (self.settings.screen_width, self.settings.screen_height))
 
+        # Initialize the sound mixer and load the laser sound.
         pygame.mixer.init()
         self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
         self.laser_sound.set_volume(0.5)
-        
 
     def run_game(self):
         """Start the main loop for the game."""
         while True:
-             self._check_events()
-             self.ship.update()
-             self._update_bullets()
-             self._update_screen()
-             self.clock.tick(self.settings.FPS)
+            self._check_events()
+            self.ship.update()
+            self._update_bullets()
+            self._update_screen()
+            self.clock.tick(self.settings.FPS)
 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -62,7 +62,6 @@ class AlienInvasion:
             if self.ship.fire():
                 self.laser_sound.play()
                 self.laser_sound.fadeout(250)
-                
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
@@ -79,18 +78,17 @@ class AlienInvasion:
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
-        # Draw bullets from the arsenal
-        self.ship.arsenal.draw()
-    
+
+        # Blit background and ship, then update the display.
         self.screen.blit(self.bg, (0, 0))
         self.ship.draw()
         pygame.display.flip()
-    
+
     def _update_bullets(self):
         """Update position of bullets and get rid of old bullets."""
-        self.ship.arsenal.update_arsenal()
+        self.ship.bullet_manager.update_active_bullets() 
 
 if __name__ == '__main__':
-    # Make a game instance, and run the game.
+    # Create an instance of the game and start the main loop.
     ai = AlienInvasion()
     ai.run_game()
