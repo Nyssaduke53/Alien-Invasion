@@ -1,10 +1,11 @@
 import pygame
+from arsenal import Arsenal
 
 
 class Ship:
     """A class to manage the ship."""
 
-    def __init__(self, ai_game):
+    def __init__(self, ai_game, arsenal: 'Arsenal'):
         """Initialize the ship and set its starting position."""
         self.game = ai_game
         self.screen = ai_game.screen
@@ -12,7 +13,7 @@ class Ship:
         self.screen_rect = self.screen.get_rect()
 
         # Load the ship image and get its rect.
-        self.image = pygame.image.load('Assets/images/ship (1).png')
+        self.image = pygame.image.load(self.settings.ship_file)
         self.image = pygame.transform.scale(self.image, (self.settings.ship_width, self.settings.ship_height))
 
         self.rect = self.image.get_rect()
@@ -28,8 +29,15 @@ class Ship:
         self.moving_right = False
         self.moving_left = False
 
+        self.arsenal = arsenal
+
     def update(self):
-        """Update the ship's position based on the movement flag."""
+        
+        self.update_ship_movement()
+        self.arsenal.update_arsenal()
+
+
+    def update_ship_movement(self):
         # Update the ship's x value, not the rect.
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.ship_speed
@@ -39,6 +47,12 @@ class Ship:
         # Update rect object from self.x.
         self.rect.x = self.x
 
+
     def draw(self):
         """Draw the ship at its current location."""
+        self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
+
+    def fire(self):
+        return self.arsenal.fire_bullet()
+    

@@ -1,9 +1,9 @@
 import sys
-
 import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from arsenal import Arsenal
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -19,12 +19,16 @@ class AlienInvasion:
         
         pygame.display.set_caption(self.settings.name)
 
-        self.ship = Ship(self)
+        self.ship = Ship(self, Arsenal(self))
         self.bullets = pygame.sprite.Group()
 
         # Set the background.
         self.bg = pygame.image.load(self.settings.bg_file)
         self.bg = pygame.transform.scale(self.bg, (self.settings.screen_width, self.settings.screen_height))
+
+        pygame.mixer.init()
+        self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
+        self.laser_sound.set_volume(0.5)
         
 
     def run_game(self):
@@ -55,7 +59,10 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
-            self._fire_bullet()
+            if self.ship.fire():
+                self.laser_sound.play()
+                self.laser_sound.fadeout(250)
+                
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
@@ -66,28 +73,22 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
-        if len(self.bullets) < self.settings.bullets_allowed:
+        if len(self.bullets) < self.settings.bullet_amount:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
-        
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
+        # Draw bullets from the arsenal
+        self.ship.arsenal.draw()
+    
         self.screen.blit(self.bg, (0, 0))
         self.ship.draw()
         pygame.display.flip()
     
     def _update_bullets(self):
         """Update position of bullets and get rid of old bullets."""
-        # Update bullet positions.
-        self.bullets.update()
-
-        # Get rid of bullets that have disappeared.
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
+        self.ship.arsenal.update_arsenal()
 
 if __name__ == '__main__':
     # Make a game instance, and run the game.

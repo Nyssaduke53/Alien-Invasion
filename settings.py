@@ -8,17 +8,20 @@ class Settings:
         self.screen_height = 800
         self.bg_file = Path.cwd() / 'Assets' / 'images' / 'starbasesnow.png'
         self.ship_file = Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
+        self.bullet_file = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
+        self.laser_sound = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+
         self.ship_width = 40
         self.ship_height = 60
         self.name = "Alien Invasion"
         self.FPS = 60
 
         # Ship settings
-        self.ship_speed = 4.5
+        self.ship_speed = 7.5
 
         # Bullet settings
-        self.bullet_speed = 16.0
-        self.bullet_width = 3
-        self.bullet_height = 15
+        self.bullet_speed = 8.0
+        self.bullet_width = 9
+        self.bullet_height = 45
         self.bullet_color = (60, 60, 60)
-        self.bullets_allowed = 3
+        self.bullet_amount = 3
