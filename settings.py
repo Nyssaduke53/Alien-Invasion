@@ -18,6 +18,7 @@ class Settings:
         self.ship_file = Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
         self.bullet_file = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
         self.laser_sound = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+        self.alien_file = Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
 
         # Ship appearance
         self.ship_width = 40
@@ -36,3 +37,7 @@ class Settings:
         self.bullet_height = 45
         self.bullet_color = (60, 60, 60)
         self.bullet_amount = 3
+
+        self.fleet_speed = 5
+        self.alien_w = 40
+        self.alien_h = 40

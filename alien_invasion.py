@@ -4,6 +4,7 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from bullet_manager import BulletManager
+from alien import Alien
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -22,6 +23,8 @@ class AlienInvasion:
         self.ship = Ship(self, BulletManager(self))
         self.bullets = pygame.sprite.Group()
 
+        self.alien = Alien(self, 20, 20)
+
         # Load and scale background image.
         self.bg = pygame.image.load(self.settings.bg_file)
         self.bg = pygame.transform.scale(self.bg, (self.settings.screen_width, self.settings.screen_height))
@@ -37,6 +40,7 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self.alien.update()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
@@ -82,6 +86,7 @@ class AlienInvasion:
         # Blit background and ship, then update the display.
         self.screen.blit(self.bg, (0, 0))
         self.ship.draw()
+        self.alien.draw_alien()
         pygame.display.flip()
 
     def _update_bullets(self):
