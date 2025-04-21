@@ -23,12 +23,15 @@ class Ship:
         self.rect = self.image.get_rect()
 
         # Position the ship at the bottom center of the screen.
-        self.rect.midbottom = self.screen_rect.midbottom
-        self.x = float(self.rect.x)
+        self._center_ship()
 
         # Movement flags: The ship starts stationary.
         self.moving_right = False
         self.moving_left = False
+
+    def _center_ship(self):
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
         
 
     def update(self):
@@ -71,3 +74,9 @@ class Ship:
         :return: Boolean indicating if the bullet was successfully fired.
         """
         return self.bullet_manager.fire_bullet()
+    
+    def check_collisions(self, other_group):
+        if pygame.sprite.spritecollideany(self, other_group):
+            self._center_ship()
+            return True
+        return False
